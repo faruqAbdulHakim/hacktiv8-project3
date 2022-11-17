@@ -5,7 +5,17 @@
   "main": "app.js",
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "dev:db:create": "sequelize db:create --env development",
+    "dev:db:migrate": "sequelize db:migrate --env development",
+    "dev:db:seed": "sequelize db:seed:all --env development",
+    "dev:db:drop": "sequelize db:drop --env development",
+    "dev:db:setup": "npm run dev:db:drop & npm run dev:db:create & npm run dev:db:migrate & npm run dev:db:seed",
+    "prod:db:create": "sequelize db:create --env production",
+    "prod:db:migrate": "sequelize db:migrate --env production",
+    "prod:db:seed": "sequelize db:seed:all --env production",
+    "prod:db:drop": "sequelize db:drop --env production",
+    "prod:db:setup": "npm run prod:db:drop & npm run prod:db:create & npm run prod:db:migrate & npm run prod:db:seed"
   },
   "author": "Faruq, Perdana, Rio",
   "license": "ISC",
