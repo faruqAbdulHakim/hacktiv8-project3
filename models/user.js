@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const bcryptHelper = require('../helpers/bcryptHelper');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -50,14 +51,10 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: {
             msg: 'password tidak boleh kosong',
           },
-          min: {
-            args: 6,
-            msg: 'panjang password minimal 6 karakter',
-          },
-          max: {
-            args: 10,
-            msg: 'panjang password maksimal 10 karakter',
-          },
+          len: {
+            args: [6, 10],
+            msg: 'password harus terdiri 6 hingga 10 karakter'
+          }
         },
       },
       gender: {
@@ -103,11 +100,11 @@ module.exports = (sequelize, DataTypes) => {
             msg: 'balance tidak boleh kosong',
           },
           min: {
-            args: 0,
+            args: [0],
             msg: 'nilai minimal untuk balance adalah 0',
           },
           max: {
-            args: 100000000,
+            args: [100000000],
             msg: 'nilai maksimal untuk balance adalah 100000000',
           },
         },
@@ -117,11 +114,14 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'User',
       hooks: {
+        beforeValidate: (user, options) => {
+          user.balance = 0;
+        },
         beforeCreate: (user, options) => {
-          // TODO: hash user password, etc
+          user.password = bcryptHelper.hashPassword(user.password);
         },
         beforeUpdate: (user, options) => {
-          // TODO: hash user password, etc
+          user.password = bcryptHelper.hashPassword(user.password);
         },
       },
     }
