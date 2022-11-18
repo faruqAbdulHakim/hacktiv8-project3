@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 
 const bcryptHelper = {
   hashPassword: (passwordString) => {
-    const salt = bcrypt.genSaltSync(16);
+    const salt = bcrypt.genSaltSync(12);
     return bcrypt.hashSync(passwordString, salt);
   },
 
