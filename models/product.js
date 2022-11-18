@@ -37,11 +37,11 @@ module.exports = (sequelize, DataTypes) => {
             msg: 'price harus berupa angka integer',
           },
           min: {
-            args: 0,
+            args: [0],
             msg: 'nilai minimal dari price adalah 0',
           },
           max: {
-            args: 50000000,
+            args: [50000000],
             msg: 'nilai maksimal dari price adalah 50000000',
           },
         },
@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: 'stock harus berupa angka integer',
           },
           min: {
-            args: 5,
+            args: [5],
             msg: 'nilai minimal dari stock adalah 5',
           },
         },

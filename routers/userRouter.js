@@ -1,8 +1,7 @@
 const usersRouter = require("express").Router();
+const UserController = require('../controllers/UserController');
 
-usersRouter.post("/register", (req, res) => {
-  res.status(201).json("register");
-});
+usersRouter.post("/register", UserController.register);
 usersRouter.post("/login", (req, res) => {
   res.status(200).json("login");
 });
