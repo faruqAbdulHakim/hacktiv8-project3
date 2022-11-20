@@ -1,10 +1,15 @@
-if (process.env.NODE_ENV !== "production") require("dotenv").config;
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-exports.sign = (payload, options) => {
-  return jwt.sign(payload, process.env.SECRET_TOKEN, options);
+const jwtHelper = {
+  sign: (payload, options) => {
+    const SECRET_TOKEN = process.env.SECRET_TOKEN;
+    return jwt.sign(payload, SECRET_TOKEN, options);
+  },
+
+  verify: (token, options) => {
+    const SECRET_TOKEN = process.env.SECRET_TOKEN;
+    return jwt.verify(token, SECRET_TOKEN, options);
+  },
 };
 
-exports.verify = (token, options) => {
-  return jwt.verify(token, process.env.SECRET_TOKEN, options);
-};
+module.exports = jwtHelper;

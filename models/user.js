@@ -120,9 +120,6 @@ module.exports = (sequelize, DataTypes) => {
         beforeCreate: (user, options) => {
           user.password = bcryptHelper.hashPassword(user.password);
         },
-        beforeUpdate: (user, options) => {
-          user.password = bcryptHelper.hashPassword(user.password);
-        },
       },
     }
   );
