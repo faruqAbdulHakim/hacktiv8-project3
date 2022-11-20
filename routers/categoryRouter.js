@@ -1,16 +1,10 @@
-const categoryRouter = require("express").Router();
+const categoryRouter = require('express').Router();
+const CategoryController = require('../controllers/CategoryController');
+const auth = require('../middlewares/auth');
 
-categoryRouter.post("/", (req, res) => {
-  res.status(201).json("create");
-});
-categoryRouter.get("/", (req, res) => {
-  res.status(200).json("get all");
-});
-categoryRouter.patch("/:categoryId", (req, res) => {
-  res.status(200).json("patch");
-});
-categoryRouter.delete("/:categoryId", (req, res) => {
-  res.status(200).json("delete");
-});
+categoryRouter.post('/', auth, CategoryController.create);
+categoryRouter.get('/', auth, CategoryController.findAll);
+categoryRouter.patch('/:categoryId', auth, CategoryController.update);
+categoryRouter.delete('/:categoryId', auth, CategoryController.delete);
 
 module.exports = categoryRouter;
