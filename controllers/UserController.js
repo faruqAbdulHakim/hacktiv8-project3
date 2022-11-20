@@ -24,10 +24,7 @@ const UserController = {
         },
       });
     } catch (error) {
-      // TODO: updated soon
-      res
-        .status(400)
-        .json({ error: error.errors.map((error) => error.message) });
+      next(error);
     }
   },
 
@@ -50,7 +47,7 @@ const UserController = {
       const token = jwtHelper.sign({ id: user.id, role: user.role });
       res.status(200).json({ token });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      next(error);
     }
   },
 
@@ -75,7 +72,7 @@ const UserController = {
         user: updatedUser,
       });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      next(error);
     }
   },
 
@@ -87,7 +84,7 @@ const UserController = {
         .status(200)
         .json({ message: 'Your account has been successfully deleted' });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      next(error);
     }
   },
 
@@ -117,7 +114,7 @@ const UserController = {
         message: `Your balance has been successfully updated to RP ${updatedBalance}`,
       });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      next(error);
     }
   },
 };
