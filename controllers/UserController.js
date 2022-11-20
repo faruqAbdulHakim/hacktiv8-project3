@@ -17,6 +17,7 @@ const UserController = {
         user: {
           id: createdUser.id,
           full_name: createdUser.full_name,
+          email: createdUser.email,
           gender: createdUser.gender,
           balance: createdUser.balance,
           createdAt: createdUser.createdAt,
