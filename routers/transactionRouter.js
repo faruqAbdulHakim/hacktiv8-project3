@@ -1,16 +1,16 @@
-const transactionRouter = require("express").Router();
+const transactionRouter = require('express').Router();
+const transactionHistoryController = require('../controllers/TransactionHistoryController');
+const auth = require('../middlewares/auth');
 
-transactionRouter.post("/", (req, res) => {
-  res.status(201).json("create");
+transactionRouter.post('/', auth, transactionHistoryController.create);
+transactionRouter.get('/user', (req, res) => {
+  res.status(200).json('get user');
 });
-transactionRouter.get("/user", (req, res) => {
-  res.status(200).json("get user");
+transactionRouter.get('/admin', (req, res) => {
+  res.status(200).json('get admin');
 });
-transactionRouter.get("/admin", (req, res) => {
-  res.status(200).json("get admin");
-});
-transactionRouter.get("/:transactionId", (req, res) => {
-  res.status(200).json("get by id");
+transactionRouter.get('/:transactionId', (req, res) => {
+  res.status(200).json('get by id');
 });
 
 module.exports = transactionRouter;
