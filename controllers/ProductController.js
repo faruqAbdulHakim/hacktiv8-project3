@@ -1,4 +1,5 @@
 const { Product } = require('../models/index');
+const { toRupiah } = require('../helpers/currencyHelper');
 
 const ProductController = {
   create: async (req, res, next) => {
@@ -15,8 +16,7 @@ const ProductController = {
         CategoryId,
       });
 
-      const parseStr = product.price.toString();
-      const rupiah = `Rp ${parseStr},-`;
+      const rupiah = toRupiah(product.price);
       res.status(201).json({
         product: {
           id: product.id,
@@ -36,7 +36,7 @@ const ProductController = {
   getAll: async (req, res, next) => {
     try {
       const products = await Product.findAll();
-      products.filter((column) => (column.dataValues.price = `Rp ${column.dataValues.price},-`));
+      products.filter((column) => (column.dataValues.price = toRupiah(column.dataValues.price)));
       res.status(200).json({ products });
     } catch (error) {
       console.log(error);
@@ -54,8 +54,7 @@ const ProductController = {
         return res.status(404).json({ message: 'Product Not Found' });
       }
 
-      const parseStr = product.price.toString();
-      const rupiah = `Rp ${parseStr},-`;
+      const rupiah = toRupiah(product.dataValues.price);
       res.status(201).json({
         product: {
           id: product.id,
@@ -96,8 +95,8 @@ const ProductController = {
           }
         )
       )[1][0];
-      const parseStr = product.price.toString();
-      const rupiah = `Rp ${parseStr},-`;
+
+      const rupiah = toRupiah(product.dataValues.price);
       res.status(201).json({
         product: {
           id: product.id,
@@ -128,8 +127,7 @@ const ProductController = {
       }
 
       const product = (await Product.update({ CategoryId }, { where: { id: productId }, returning: true }))[1][0];
-      const parseStr = product.price.toString();
-      const rupiah = `Rp ${parseStr},-`;
+      const rupiah = toRupiah(product.dataValues.price);
       res.status(201).json({
         product: {
           id: product.id,
