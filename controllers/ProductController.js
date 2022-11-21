@@ -15,7 +15,19 @@ const ProductController = {
         CategoryId,
       });
 
-      res.status(201).json(product);
+      const parseStr = product.price.toString();
+      const rupiah = `Rp ${parseStr},-`;
+      res.status(201).json({
+        product: {
+          id: product.id,
+          title: product.title,
+          price: rupiah,
+          stock: product.stock,
+          CategoryId: product.CategoryId,
+          updatedAt: product.updatedAt,
+          createdAt: product.createdAt,
+        },
+      });
     } catch (error) {
       next(error);
     }
@@ -24,9 +36,10 @@ const ProductController = {
   getAll: async (req, res, next) => {
     try {
       const products = await Product.findAll();
+      products.filter((column) => (column.dataValues.price = `Rp ${column.dataValues.price},-`));
       res.status(200).json({ products });
     } catch (error) {
-      next(error);
+      console.log(error);
     }
   },
 
@@ -41,7 +54,19 @@ const ProductController = {
         return res.status(404).json({ message: 'Product Not Found' });
       }
 
-      res.status(200).json({ product });
+      const parseStr = product.price.toString();
+      const rupiah = `Rp ${parseStr},-`;
+      res.status(201).json({
+        product: {
+          id: product.id,
+          title: product.title,
+          price: rupiah,
+          stock: product.stock,
+          CategoryId: product.CategoryId,
+          updatedAt: product.updatedAt,
+          createdAt: product.createdAt,
+        },
+      });
     } catch (error) {}
   },
 
@@ -71,7 +96,19 @@ const ProductController = {
           }
         )
       )[1][0];
-      res.status(200).json({ product });
+      const parseStr = product.price.toString();
+      const rupiah = `Rp ${parseStr},-`;
+      res.status(201).json({
+        product: {
+          id: product.id,
+          title: product.title,
+          price: rupiah,
+          stock: product.stock,
+          CategoryId: product.CategoryId,
+          updatedAt: product.updatedAt,
+          createdAt: product.createdAt,
+        },
+      });
     } catch (error) {
       next(error);
     }
@@ -91,7 +128,19 @@ const ProductController = {
       }
 
       const product = (await Product.update({ CategoryId }, { where: { id: productId }, returning: true }))[1][0];
-      res.status(200).json({ product });
+      const parseStr = product.price.toString();
+      const rupiah = `Rp ${parseStr},-`;
+      res.status(201).json({
+        product: {
+          id: product.id,
+          title: product.title,
+          price: rupiah,
+          stock: product.stock,
+          CategoryId: product.CategoryId,
+          updatedAt: product.updatedAt,
+          createdAt: product.createdAt,
+        },
+      });
     } catch (error) {
       next(error);
     }
