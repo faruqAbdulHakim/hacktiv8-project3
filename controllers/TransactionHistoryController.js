@@ -80,6 +80,94 @@ const TransactionHistoryController = {
       console.log(error);
     }
   },
+
+  getUser: async (req, res, next) => {
+    try {
+      const user = req.user;
+      if (user.role == 'customer') {
+        const transaction = await TransactionHistory.findAll({
+          attributes: ['ProductId', 'UserId', 'quantity', 'total_price', 'createdAt', 'updatedAt'],
+          include: [
+            {
+              model: Product,
+              attributes: ['id', 'title', 'price', 'stock', 'CategoryId'],
+            },
+          ],
+          where: { UserId: user.id },
+        });
+        transaction.filter((column) => {
+          column.dataValues.total_price = toRupiah(column.dataValues.total_price);
+          column.dataValues.Product.price = toRupiah(column.dataValues.Product.price);
+        });
+        res.status(200).json({
+          transactionHistories: transaction,
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getAdmin: async (req, res, next) => {
+    try {
+      const userAdmin = req.user;
+      if (userAdmin.role == 'admin') {
+        const transaction = await TransactionHistory.findAll({
+          attributes: ['ProductId', 'UserId', 'quantity', 'total_price', 'createdAt', 'updatedAt'],
+          include: [
+            {
+              model: Product,
+              attributes: ['id', 'title', 'price', 'stock', 'CategoryId'],
+            },
+            {
+              model: User,
+              attributes: ['id', 'email', 'balance', 'gender', 'role'],
+            },
+          ],
+        });
+        transaction.filter((column) => {
+          column.dataValues.total_price = toRupiah(column.dataValues.total_price);
+          column.dataValues.Product.price = toRupiah(column.dataValues.Product.price);
+          column.dataValues.User.balance = toRupiah(column.dataValues.User.balance);
+        });
+        res.status(200).json({
+          transactionHistories: transaction,
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getById: async (req, res, next) => {
+    try {
+      const user = req.user;
+      const { transactionId } = req.params;
+      if (user.role == 'customer') {
+        const transaction = await TransactionHistory.findOne({
+          attributes: ['ProductId', 'UserId', 'quantity', 'total_price', 'createdAt', 'updatedAt'],
+          include: [
+            {
+              model: Product,
+              attributes: ['id', 'title', 'price', 'stock', 'CategoryId'],
+            },
+          ],
+          where: { id: transactionId },
+        });
+
+        if (!transaction) {
+          return res.status(404).json({
+            message: 'Transaction not found',
+          });
+        }
+        transaction.dataValues.total_price = toRupiah(transaction.dataValues.total_price);
+        transaction.dataValues.Product.price = toRupiah(transaction.dataValues.Product.price);
+        res.status(200).json(transaction);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 module.exports = TransactionHistoryController;
