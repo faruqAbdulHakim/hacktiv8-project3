@@ -1,16 +1,11 @@
 const transactionRouter = require('express').Router();
 const transactionHistoryController = require('../controllers/TransactionHistoryController');
 const auth = require('../middlewares/auth');
+const adminOnly = require('../middlewares/adminOnly');
 
 transactionRouter.post('/', auth, transactionHistoryController.create);
-transactionRouter.get('/user', (req, res) => {
-  res.status(200).json('get user');
-});
-transactionRouter.get('/admin', (req, res) => {
-  res.status(200).json('get admin');
-});
-transactionRouter.get('/:transactionId', (req, res) => {
-  res.status(200).json('get by id');
-});
+transactionRouter.get('/user', auth, transactionHistoryController.getUser);
+transactionRouter.get('/admin', auth, adminOnly, transactionHistoryController.getAdmin);
+transactionRouter.get('/:transactionId', auth, transactionHistoryController.getById);
 
 module.exports = transactionRouter;
