@@ -1,5 +1,6 @@
 const bcryptHelper = require('../helpers/bcryptHelper');
 const jwtHelper = require('../helpers/jwtHelper');
+const currencyHelper = require('../helpers/currencyHelper');
 const { User } = require('../models');
 
 const UserController = {
@@ -19,7 +20,7 @@ const UserController = {
           full_name: createdUser.full_name,
           email: createdUser.email,
           gender: createdUser.gender,
-          balance: createdUser.balance,
+          balance: currencyHelper.toRupiah(createdUser.balance),
           createdAt: createdUser.createdAt,
         },
       });
@@ -111,7 +112,9 @@ const UserController = {
         )
       )[1][0].dataValues.balance;
       res.status(200).json({
-        message: `Your balance has been successfully updated to RP ${updatedBalance}`,
+        message: `Your balance has been successfully updated to ${currencyHelper.toRupiah(
+          updatedBalance
+        )}`,
       });
     } catch (error) {
       next(error);
