@@ -39,7 +39,7 @@ const ProductController = {
       products.filter((column) => (column.dataValues.price = toRupiah(column.dataValues.price)));
       res.status(200).json({ products });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   },
 
@@ -66,7 +66,9 @@ const ProductController = {
           createdAt: product.createdAt,
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      next(error);
+    }
   },
 
   update: async (req, res, next) => {
