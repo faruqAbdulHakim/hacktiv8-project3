@@ -6,7 +6,6 @@ const CategoryController = {
       const { type } = req.body;
       const createCategory = await Category.create({
         type,
-        sold_product_amount: 0,
       });
       res.status(201).json({
         category: {
