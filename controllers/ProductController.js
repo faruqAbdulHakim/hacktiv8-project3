@@ -112,6 +112,9 @@ const ProductController = {
     try {
       const { productId } = req.params;
       const { CategoryId } = req.body;
+      if (!CategoryId) {
+        return res.status(400).json({ message: 'Membutuhkan CategoryId untuk patch data product' });
+      }
 
       const findProduct = await Product.findOne({
         where: { id: productId },
