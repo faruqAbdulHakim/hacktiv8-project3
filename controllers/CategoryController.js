@@ -18,9 +18,7 @@ const CategoryController = {
         },
       });
     } catch (error) {
-      res
-        .status(400)
-        .json({ error: error.errors.map((error) => error.message) });
+      next(error);
     }
   },
 
@@ -35,7 +33,7 @@ const CategoryController = {
       });
       res.status(200).json({ categories });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      next(error);
     }
   },
 
@@ -45,6 +43,13 @@ const CategoryController = {
       const { type } = req.body;
       if (!type) {
         return res.status(400).json({ message: 'Tidak ada data yang diubah' });
+      }
+
+      const findCategory = await Category.findOne({
+        where: { id: categoryId },
+      });
+      if (!findCategory) {
+        return res.status(404).json({ message: 'Category not found' });
       }
       const updateCategory = await Category.update(
         { type },
@@ -64,19 +69,26 @@ const CategoryController = {
         });
       }
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      next(error);
     }
   },
 
   delete: async (req, res, next) => {
     try {
       const { categoryId } = req.params;
+      const findCategory = await Category.findOne({
+        where: { id: categoryId },
+      });
+
+      if (!findCategory) {
+        return res.status(404).json({ message: 'Category Not Found' });
+      }
       await Category.destroy({ where: { id: categoryId } });
       res
         .status(200)
         .json({ message: 'Category has been successfully deleted' });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      next(error);
     }
   },
 };
