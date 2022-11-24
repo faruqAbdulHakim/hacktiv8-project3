@@ -5,9 +5,6 @@ const ProductController = {
   create: async (req, res, next) => {
     try {
       const { title, price, stock, CategoryId } = req.body;
-      if (!title || !price || !stock || !CategoryId) {
-        return res.status(400).json({ message: 'Data tidak boleh kosong' });
-      }
 
       const product = await Product.create({
         title,
@@ -75,10 +72,6 @@ const ProductController = {
     try {
       const { productId } = req.params;
       const { price, stock, title } = req.body;
-
-      if (!price || !stock || !title) {
-        return res.status(400).json({ message: 'Data tidak noleh kosong' });
-      }
 
       const findProduct = await Product.findOne({
         where: { id: productId },

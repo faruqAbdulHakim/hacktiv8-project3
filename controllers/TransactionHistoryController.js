@@ -6,9 +6,6 @@ const TransactionHistoryController = {
     try {
       const user = req.user;
       const { productId, quantity } = req.body;
-      if (!productId || !quantity) {
-        return res.status(400).json({ message: 'Data tidak boleh kosong' });
-      }
 
       const data = await Product.findOne({
         where: { id: productId },
@@ -66,7 +63,12 @@ const TransactionHistoryController = {
         {
           sold_product_amount: sold_product_amount.sold_product_amount + quantity,
         },
-        { where: { id: data.dataValues.CategoryId } }
+        {
+          where: {
+            id: data.dataValues.CategoryId,
+          },
+          hooks: false,
+        }
       );
 
       await TransactionHistory.create({
@@ -154,6 +156,29 @@ const TransactionHistoryController = {
       const user = req.user;
       const { transactionId } = req.params;
       if (user.role == 'customer') {
+        // get by id only data transaction users
+        const transaction = await TransactionHistory.findOne({
+          attributes: ['ProductId', 'UserId', 'quantity', 'total_price', 'createdAt', 'updatedAt'],
+          include: [
+            {
+              model: Product,
+              attributes: ['id', 'title', 'price', 'stock', 'CategoryId'],
+            },
+          ],
+          where: { id: transactionId, UserId: user.id },
+        });
+
+        if (!transaction) {
+          return res.status(404).json({
+            message: 'Transaction not found',
+          });
+        }
+
+        transaction.dataValues.total_price = toRupiah(transaction.dataValues.total_price);
+        transaction.dataValues.Product.price = toRupiah(transaction.dataValues.Product.price);
+        res.status(200).json(transaction);
+      } else {
+        // Admin can get data by id on all users
         const transaction = await TransactionHistory.findOne({
           attributes: ['ProductId', 'UserId', 'quantity', 'total_price', 'createdAt', 'updatedAt'],
           include: [
