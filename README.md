@@ -45,3 +45,8 @@ erDiagram
   TransactionHistories }|--|| Products : ""
 ```
 
+## LINK DEPLOYMENT
+
+```bash
+https://tokobelanja-restfull-api.up.railway.app/
+```
